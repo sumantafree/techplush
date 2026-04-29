@@ -12,8 +12,9 @@ export const revalidate = 3600;
 
 interface Params { slug: string }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const category = CATEGORY_SLUGS[params.slug];
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { slug } = await params;
+  const category = CATEGORY_SLUGS[slug];
   if (!category) return { title: "Not Found" };
   return {
     title: category,
@@ -61,11 +62,12 @@ async function CategoryContent({ slug }: { slug: string }) {
   );
 }
 
-export default function CategoryPage({ params }: { params: Params }) {
+export default async function CategoryPage({ params }: { params: Promise<Params> }) {
+  const { slug } = await params;
   return (
     <DashboardShell>
       <Suspense fallback={<DashboardSkeleton />}>
-        <CategoryContent slug={params.slug} />
+        <CategoryContent slug={slug} />
       </Suspense>
     </DashboardShell>
   );
