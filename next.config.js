@@ -9,7 +9,7 @@ const nextConfig = {
     serverActions: {
       allowedOrigins: [
         "localhost:3000",
-        "tutor.theaihublab.com",
+        "techplush.mindartdigital.com",
       ],
     },
   },

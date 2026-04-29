@@ -2,7 +2,7 @@
 
 A Next.js 15 SaaS for tech bloggers: auto-fetched articles across AI / marketing / research / society, saved to a personal library, with a Gemini-powered blog idea + full post generator.
 
-Live deploy target: **https://tutor.theaihublab.com** (Hostinger subdomain → Vercel).
+Live deploy target: **https://techplush.mindartdigital.com** (Hostinger subdomain → Vercel).
 
 ---
 
@@ -44,7 +44,7 @@ Visit http://localhost:3000, then hit http://localhost:3000/api/refresh once to 
 
 ---
 
-## Deploy to `tutor.theaihublab.com`
+## Deploy to `techplush.mindartdigital.com`
 
 See **[DEPLOY.md](DEPLOY.md)** — step-by-step walkthrough covering:
 1. Supabase project + schema

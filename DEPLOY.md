@@ -1,9 +1,9 @@
-# Deploying TechPulse to `tutor.theaihublab.com`
+# Deploying TechPulse to `techplush.mindartdigital.com`
 
 **Stack:**
 - **Supabase** → Postgres DB + user table
 - **Vercel** → hosts the Next.js app (primary)
-- **Hostinger cPanel** → points `tutor.theaihublab.com` at Vercel
+- **Hostinger cPanel** → points `techplush.mindartdigital.com` at Vercel
 - **Google Gemini** → all AI features
 - **Render.com** → optional fallback (see end of doc)
 
@@ -40,15 +40,15 @@ Pick **one** SMTP provider — all have free tiers:
 |---|---|---|
 | **Resend** (recommended) | 3 000 emails/mo, 100/day | `smtp://resend:re_XXXXXX@smtp.resend.com:465` |
 | **SendGrid**             | 100 emails/day            | `smtp://apikey:SG.XXXXXX@smtp.sendgrid.net:587` |
-| **Mailgun**              | 5 000 emails for 3 months | `smtp://postmaster%40mg.theaihublab.com:PASSWORD@smtp.mailgun.org:587` |
+| **Mailgun**              | 5 000 emails for 3 months | `smtp://postmaster%40mg.mindartdigital.com:PASSWORD@smtp.mailgun.org:587` |
 
 Then set:
 ```
 EMAIL_SERVER=<one of the above>
-EMAIL_FROM=noreply@theaihublab.com
+EMAIL_FROM=noreply@mindartdigital.com
 ```
 
-**Important:** verify the domain `theaihublab.com` in your provider's dashboard and add the DKIM + SPF TXT records they give you to your Hostinger DNS (same panel you'll use in step 6). Otherwise magic-link emails will go to spam.
+**Important:** verify the domain `mindartdigital.com` in your provider's dashboard and add the DKIM + SPF TXT records they give you to your Hostinger DNS (same panel you'll use in step 6). Otherwise magic-link emails will go to spam.
 
 ---
 
@@ -81,9 +81,9 @@ git push -u origin main
 
    ```
    NEXTAUTH_SECRET              = <run: openssl rand -base64 32>
-   NEXTAUTH_URL                 = https://tutor.theaihublab.com
+   NEXTAUTH_URL                 = https://techplush.mindartdigital.com
    EMAIL_SERVER                 = smtp://... (from step 3)
-   EMAIL_FROM                   = noreply@theaihublab.com
+   EMAIL_FROM                   = noreply@mindartdigital.com
 
    NEXT_PUBLIC_SUPABASE_URL     = https://xxx.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY= eyJ...
@@ -92,7 +92,7 @@ git push -u origin main
    NEWSAPI_KEY                  = <newsapi.org key>
    GEMINI_API_KEY               = <aistudio.google.com key>
 
-   NEXT_PUBLIC_APP_URL          = https://tutor.theaihublab.com
+   NEXT_PUBLIC_APP_URL          = https://techplush.mindartdigital.com
    CRON_SECRET                  = <any long random string>
    ```
 
@@ -106,12 +106,12 @@ The daily CRON is already wired via [`vercel.json`](vercel.json) and fires at 06
 
 ---
 
-## 6. Point `tutor.theaihublab.com` at Vercel (10 min, Hostinger)
+## 6. Point `techplush.mindartdigital.com` at Vercel (10 min, Hostinger)
 
 ### 6a. Add the subdomain in Vercel
 
 1. Vercel project → **Settings → Domains → Add**.
-2. Enter `tutor.theaihublab.com` → click **Add**.
+2. Enter `techplush.mindartdigital.com` → click **Add**.
 3. Vercel will show **one of two** DNS instructions. Note which:
 
    **Option A — CNAME (easier, recommended):**
@@ -132,21 +132,21 @@ The daily CRON is already wired via [`vercel.json`](vercel.json) and fires at 06
 
 ### 6b. Add the DNS record in Hostinger
 
-1. Log in to Hostinger → **Domains → theaihublab.com → DNS / Nameservers**.
-   *(On some cPanel layouts: cPanel → **Zone Editor** → theaihublab.com → **+ CNAME Record**.)*
+1. Log in to Hostinger → **Domains → mindartdigital.com → DNS / Nameservers**.
+   *(On some cPanel layouts: cPanel → **Zone Editor** → mindartdigital.com → **+ CNAME Record**.)*
 2. Click **Add record**. Fill it in exactly as Vercel told you:
 
    | Field | Value (Option A / CNAME) |
    |---|---|
    | Type  | CNAME |
-   | Name  | `tutor` (NOT `tutor.theaihublab.com`) |
+   | Name  | `tutor` (NOT `techplush.mindartdigital.com`) |
    | Points to / Target | `cname.vercel-dns.com` |
    | TTL   | 3600 (or default) |
 
 3. **Save**.
 4. Wait 5–15 min for DNS to propagate. Check with:
    ```bash
-   nslookup tutor.theaihublab.com
+   nslookup techplush.mindartdigital.com
    ```
    You should see `cname.vercel-dns.com` in the answer.
 5. Back in Vercel, the domain row changes from "Invalid Configuration" → "Valid Configuration ✓" and Vercel auto-issues an SSL cert (~1 min).
@@ -154,14 +154,14 @@ The daily CRON is already wired via [`vercel.json`](vercel.json) and fires at 06
 ### 6c. Flip NEXTAUTH_URL + app URL
 
 Once the domain is green in Vercel:
-1. Vercel → **Settings → Environment Variables** → confirm both are `https://tutor.theaihublab.com` (not the temp URL).
+1. Vercel → **Settings → Environment Variables** → confirm both are `https://techplush.mindartdigital.com` (not the temp URL).
 2. **Deployments → Redeploy latest** so the new env is live.
 
 ---
 
 ## 7. Test the live site
 
-1. Open https://tutor.theaihublab.com
+1. Open https://techplush.mindartdigital.com
 2. Click **Sign in** → enter your email → check inbox → click the magic link.
 3. Visit `/library` and save an article.
 4. Click **Generate Blog Idea** on a saved article. You should get a Gemini-generated idea in ~3 s.
