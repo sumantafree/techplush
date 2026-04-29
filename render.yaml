@@ -1,0 +1,50 @@
+# Render.com Blueprint — alternative host if you don't use Vercel.
+# Commit this file, then go to https://dashboard.render.com/blueprints
+# and point it at your repo.
+services:
+  - type: web
+    name: techpulse
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.0
+      - key: NEXTAUTH_SECRET
+        sync: false
+      - key: NEXTAUTH_URL
+        sync: false
+      - key: EMAIL_SERVER
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: NEWSAPI_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+      - key: CRON_SECRET
+        sync: false
+
+  # Render has no built-in CRON for web services; use a cron job service:
+  - type: cron
+    name: techpulse-refresh
+    runtime: docker
+    schedule: "0 6 * * *"
+    dockerCommand: |
+      sh -c "curl -fsSL -H \"Authorization: Bearer $CRON_SECRET\" $NEXT_PUBLIC_APP_URL/api/refresh"
+    envVars:
+      - key: CRON_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
