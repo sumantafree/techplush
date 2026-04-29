@@ -11,17 +11,19 @@ export const dynamic = "force-dynamic";
 export default async function WritePage({
   searchParams,
 }: {
-  searchParams: { articleId?: string };
+  searchParams: Promise<{ articleId?: string }>;
 }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) redirect("/login");
 
+  const { articleId } = await searchParams;
+
   let article: Article | null = null;
-  if (searchParams.articleId) {
+  if (articleId) {
     const { data } = await supabaseAdmin
       .from("articles")
       .select("*")
-      .eq("id", searchParams.articleId)
+      .eq("id", articleId)
       .single();
     article = data as Article;
   }
